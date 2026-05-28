@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: nbp_postgres
+    environment:
+      POSTGRES_USER: nbp_user
+      POSTGRES_PASSWORD: nbp_password
+      POSTGRES_DB: nbp_baza
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: nbp_fastapi
+    ports:
+      - "8000:8000"
+    environment:
+      # Tutaj dzieje się magia! Nadpisujemy zmienną z database.py
+      # Backend automatycznie przełączy się z SQLite na tego PostgreSQL!
+      - DATABASE_URL=postgresql://nbp_user:nbp_password@db:5432/nbp_baza
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: nbp_angular
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+
+# Zapisujemy dane z bazy na dysku, żeby nie zniknęły po restarcie kontenera
+volumes:
+  postgres_data:

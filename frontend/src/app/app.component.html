@@ -1,0 +1,34 @@
+<div style="font-family: Arial, sans-serif; padding: 20px;">
+  
+  <h1>📊 Panel Kursów Walut NBP</h1>
+  
+  <button 
+    (click)="fetchNewData()" 
+    style="padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 5px; margin-bottom: 15px;">
+    Pobierz najnowsze dane z NBP
+  </button>
+
+  <p *ngIf="message" style="color: green; font-weight: bold;">✔ {{ message }}</p>
+
+  <table *ngIf="currencies.length > 0" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <thead>
+      <tr style="background-color: #f2f2f2; text-align: left;">
+        <th style="border: 1px solid #ddd; padding: 8px;">Waluta</th>
+        <th style="border: 1px solid #ddd; padding: 8px;">Kod</th>
+        <th style="border: 1px solid #ddd; padding: 8px;">Kurs średni</th>
+        <th style="border: 1px solid #ddd; padding: 8px;">Data publikacji</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of currencies">
+        <td style="border: 1px solid #ddd; padding: 8px;">{{ c.currency }}</td>
+        <td style="border: 1px solid #ddd; padding: 8px;"><strong>{{ c.code }}</strong></td>
+        <td style="border: 1px solid #ddd; padding: 8px;">{{ c.mid }} PLN</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">{{ c.effective_date }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="currencies.length === 0" style="color: gray;">Brak danych w bazie. Kliknij przycisk powyżej, aby pobrać kursy.</p>
+
+</div>
